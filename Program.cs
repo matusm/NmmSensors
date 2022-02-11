@@ -38,12 +38,20 @@ namespace NmmSensors
             ConsoleUI.Done();
 
             //testing
-            Console.WriteLine($"number of data points: {sensors.NumberOfAirSamples}");
-            Console.WriteLine($"sample temperature: {sensors.SampleTemperature:F3} °C");
-            Console.WriteLine($"sample temperature drift: {sensors.SampleTemperatureDrift:F3} °C");
-            Console.WriteLine($"sample temperature: {sensors.AirSampleSource}");
-            Console.WriteLine($"sample temperature: {sensors.AirSampleSourceText}");
+            StringBuilder sb = new StringBuilder();
 
+            //sb.AppendLine($"sample temperature: {sensors.AirSampleSource}");
+            Console.WriteLine();
+
+            sb.AppendLine($"Status: {sensors.AirSampleSourceText}");
+            sb.AppendLine($"number of data points: {sensors.NumberOfAirSamples}");
+            sb.AppendLine($"sample temperature:    {sensors.SampleTemperature:F3} °C [{sensors.SampleTemperatureDrift:F3} °C]");
+            sb.AppendLine($"air temperature:       {sensors.AirTemperature:F3} °C [{sensors.AirTemperatureDrift:F3} °C] <{sensors.AirTemparatureGradient:F3} °C>");
+            sb.AppendLine($"relative humidity:     {sensors.RelativeHumidity:F2} % [{sensors.RelativeHumidityDrift:F2} %]");
+            sb.AppendLine($"barometric pressure:   {sensors.BarometricPressure:F0} Pa [{sensors.BarometricPressureDrift:F0} Pa]");
+            sb.AppendLine($"air temperatures lasers   X:{sensors.XTemperature:F3} °C  Y:{sensors.YTemperature:F3} °C  Z:{sensors.ZTemperature:F3} °C");
+
+            Console.WriteLine(sb.ToString());
         }
     }
 }
