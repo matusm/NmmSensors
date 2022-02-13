@@ -61,7 +61,10 @@ namespace NmmSensors
                 Status = sensors.AirSampleSourceText
             };
 
-            var serializerOptions = new JsonSerializerOptions { WriteIndented = true };
+            var serializerOptions = new JsonSerializerOptions {
+                WriteIndented = true,
+                DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull
+            };
             string jsonString = JsonSerializer.Serialize(sensorValues, serializerOptions);
 
             Console.WriteLine(jsonString);
