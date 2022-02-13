@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using Bev.IO.NmmReader;
 
 namespace NmmSensors
@@ -27,7 +28,46 @@ namespace NmmSensors
             nmmFileName.SetScanIndex(options.ScanIndex);
             NmmEnvironmentData sensors = new NmmEnvironmentData(nmmFileName);
 
-            //testing
+            SensorValues sensorValues = new SensorValues
+            {
+                FileName = nmmFileName.BaseFileName,
+                Date = DateTime.UtcNow,
+                SampleTemperature = new Quantity
+                {
+                    Average = sensors.SampleTemperature,
+                    Range = sensors.SampleTemperatureDrift,
+                    Unit = "°C"
+                },
+                AirTemperature = new Quantity
+                {
+                    Average = sensors.AirTemperature,
+                    Range = sensors.AirTemperatureDrift,
+                    Gradient = sensors.AirTemparatureGradient,
+                    Unit = "°C"
+                },
+                Humidity = new Quantity
+                {
+                    Average = sensors.RelativeHumidity,
+                    Range = sensors.RelativeHumidityDrift,
+                    Unit = "%"
+                },
+                BarometricPressure = new Quantity
+                {
+                    Average = sensors.BarometricPressure,
+                    Range = sensors.BarometricPressureDrift,
+                    Unit = "Pa"
+                },
+                NumberOfSamples = sensors.NumberOfAirSamples,
+                Status = sensors.AirSampleSourceText
+            };
+
+            var serializerOptions = new JsonSerializerOptions { WriteIndented = true };
+            string jsonString = JsonSerializer.Serialize(sensorValues, serializerOptions);
+
+            Console.WriteLine(jsonString);
+            Console.WriteLine();
+
+
             StringBuilder sb = new StringBuilder();
 
             //sb.AppendLine($"sample temperature: {sensors.AirSampleSource}");
@@ -46,5 +86,11 @@ namespace NmmSensors
 
         static void ErrorExit(string message, int code)
         { }
+
+        static double Round (double value, int decimals)
+        {
+            int temp = (int)(value * 1000);
+            return (double)temp / 1000;
+        }
     }
 }
