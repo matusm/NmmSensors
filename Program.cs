@@ -88,7 +88,10 @@ namespace NmmSensors
         }
 
         static void ErrorExit(string message, int code)
-        { }
+        {
+            Console.WriteLine($"{message} (error code {code})");
+            Environment.Exit(code);
+        }
 
         static double Round (double value, int decimals)
         {
