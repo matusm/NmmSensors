@@ -7,16 +7,15 @@ namespace NmmSensors
     public class SensorValues
     {
         public string FileName { get; set; }
-        public DateTime Date { get; set; }
+        public int NumberOfSamples { get; set; }
+        public string Status { get; set; }        
         public Quantity SampleTemperature { get; set; }
         public Quantity AirTemperature { get; set; }
         public Quantity Humidity { get; set; }
         public Quantity BarometricPressure { get; set; }
-        //public Quantity LXAirTemperature { get; set; }
-        //public Quantity LYAirTemperature { get; set; }
-        //public Quantity LZAirTemperature { get; set; }
-        public int NumberOfSamples { get; set; }
-        public string Status { get; set; }
+        public Quantity LXAirTemperature { get; set; }
+        public Quantity LYAirTemperature { get; set; }
+        public Quantity LZAirTemperature { get; set; }
     }
 
     public class Quantity
