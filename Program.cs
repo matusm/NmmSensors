@@ -22,12 +22,9 @@ namespace NmmSensors
             // get the filename(s)
             string[] fileNames = options.ListOfFileNames.ToArray();
             if (fileNames.Length == 0)
-                Console.WriteLine();
-            //ErrorExit("!Missing input file", 1);
+                ErrorExit("!Missing input file", 1);
 
-
-
-            string filename = "T22-0151_L1_D_20"; //fileNames[0];
+            string filename = fileNames[0];
             NmmFileName nmmFileName = new NmmFileName(filename);
             nmmFileName.SetScanIndex(options.ScanIndex);
             NmmEnvironmentData nmmEnvironment = new NmmEnvironmentData(nmmFileName);
