@@ -9,8 +9,11 @@ namespace NmmSensors
         [Option('s', "scan", DefaultValue = 0, HelpText = "Scan index for multi-scan files.")]
         public int ScanIndex { get; set; }
 
-        [Option('q', "quiet", HelpText = "Quiet mode. No screen output (except for errors).")]
-        public bool BeQuiet { get; set; }
+        [Option('j', "json", HelpText = "JSON output.")]
+        public bool Json { get; set; }
+
+        [Option('p', "pretty", HelpText = "JSON output pretty printed.")]
+        public bool Pretty { get; set; }
 
         [Option("comment", DefaultValue = "---", HelpText = "User supplied comment string.")]
         public string UserComment { get; set; }
@@ -27,7 +30,7 @@ namespace NmmSensors
             HelpText help = new HelpText
             {
                 Heading = new HeadingInfo(AppName, "version " + AppVer),
-                Copyright = new CopyrightInfo("Michael Matus", 2015),
+                Copyright = new CopyrightInfo("Michael Matus", 2022),
                 AdditionalNewLineAfterOption = false,
                 AddDashesToOption = true
             };

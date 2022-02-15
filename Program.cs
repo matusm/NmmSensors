@@ -25,70 +25,79 @@ namespace NmmSensors
                 Console.WriteLine();
             //ErrorExit("!Missing input file", 1);
 
-            string outputText = string.Empty;
+
 
             string filename = "T22-0151_L1_D_20"; //fileNames[0];
             NmmFileName nmmFileName = new NmmFileName(filename);
             nmmFileName.SetScanIndex(options.ScanIndex);
-            NmmEnvironmentData nmmSensors = new NmmEnvironmentData(nmmFileName);
+            NmmEnvironmentData nmmEnvironment = new NmmEnvironmentData(nmmFileName);
+
+            string outputText = string.Empty;
 
             // wrap all data in a POCO
             SensorValues sensorValues = new SensorValues
             {
                 Filename = nmmFileName.BaseFileName,
-                NumberOfSamples = nmmSensors.NumberOfAirSamples,
-                Status = nmmSensors.AirSampleSourceText,
+                NumberOfSamples = nmmEnvironment.NumberOfAirSamples,
+                Status = nmmEnvironment.AirSampleSourceText,
                 SampleTemperature = new Quantity
                 {
-                    Average = nmmSensors.SampleTemperature,
-                    Range = nmmSensors.SampleTemperatureDrift,
+                    Average = nmmEnvironment.SampleTemperature,
+                    Range = nmmEnvironment.SampleTemperatureDrift,
                     Unit = "°C"
                 },
                 AirTemperature = new Quantity
                 {
-                    Average = nmmSensors.AirTemperature,
-                    Range = nmmSensors.AirTemperatureDrift,
-                    Gradient = nmmSensors.AirTemparatureGradient,
+                    Average = nmmEnvironment.AirTemperature,
+                    Range = nmmEnvironment.AirTemperatureDrift,
+                    Gradient = nmmEnvironment.AirTemparatureGradient,
                     Unit = "°C"
                 },
                 Humidity = new Quantity
                 {
-                    Average = nmmSensors.RelativeHumidity,
-                    Range = nmmSensors.RelativeHumidityDrift,
+                    Average = nmmEnvironment.RelativeHumidity,
+                    Range = nmmEnvironment.RelativeHumidityDrift,
                     Unit = "%"
                 },
                 BarometricPressure = new Quantity
                 {
-                    Average = nmmSensors.BarometricPressure,
-                    Range = nmmSensors.BarometricPressureDrift,
+                    Average = nmmEnvironment.BarometricPressure,
+                    Range = nmmEnvironment.BarometricPressureDrift,
                     Unit = "Pa"
                 },
                 LXAirTemperature = new Quantity 
                 {
-                    Average= nmmSensors.XTemperature,
+                    Average= nmmEnvironment.XTemperature,
                     Unit="°C"
                 },
                 LYAirTemperature = new Quantity
                 {
-                    Average = nmmSensors.YTemperature,
+                    Average = nmmEnvironment.YTemperature,
                     Unit = "°C"
                 },
                 LZAirTemperature = new Quantity
                 {
-                    Average = nmmSensors.ZTemperature,
+                    Average = nmmEnvironment.ZTemperature,
                     Unit = "°C"
                 },
             };
 
-            var serializerOptions = new JsonSerializerOptions {
-                WriteIndented = true,
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
-            };
-            outputText = JsonSerializer.Serialize(sensorValues, serializerOptions);
+            if (options.Json)
+            {
+                var serializerOptions = new JsonSerializerOptions
+                {
+                    WriteIndented = false,
+                    DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+                };
+                if (options.Pretty)
+                    serializerOptions.WriteIndented = true;
+                outputText = JsonSerializer.Serialize(sensorValues, serializerOptions);
+            }
+
             Console.WriteLine(outputText);
             Console.WriteLine();
 
-            outputText = ToText(sensorValues);
+            outputText = TextSerialize(sensorValues);
             Console.WriteLine(outputText);
             Console.WriteLine();
 
@@ -96,7 +105,7 @@ namespace NmmSensors
 
         }
 
-        private static string ToText(SensorValues poco)
+        private static string TextSerialize(SensorValues poco)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Status: {poco.Status}");
