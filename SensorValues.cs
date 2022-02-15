@@ -6,9 +6,9 @@ namespace NmmSensors
 {
     public class SensorValues
     {
-        public string FileName { get; set; }
-        public int NumberOfSamples { get; set; }
-        public string Status { get; set; }        
+        public string Filename { get; set; }
+        public string Status { get; set; }
+        public int NumberOfSamples { get; set; }      
         public Quantity SampleTemperature { get; set; }
         public Quantity AirTemperature { get; set; }
         public Quantity Humidity { get; set; }

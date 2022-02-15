@@ -22,16 +22,20 @@ namespace NmmSensors
             // get the filename(s)
             string[] fileNames = options.ListOfFileNames.ToArray();
             if (fileNames.Length == 0)
-                ErrorExit("!Missing input file", 1);
+                Console.WriteLine();
+            //ErrorExit("!Missing input file", 1);
 
-            NmmFileName nmmFileName = new NmmFileName(fileNames[0]);
+            string outputText = string.Empty;
+
+            string filename = "T22-0151_L1_D_20"; //fileNames[0];
+            NmmFileName nmmFileName = new NmmFileName(filename);
             nmmFileName.SetScanIndex(options.ScanIndex);
             NmmEnvironmentData nmmSensors = new NmmEnvironmentData(nmmFileName);
 
             // wrap all data in a POCO
             SensorValues sensorValues = new SensorValues
             {
-                FileName = nmmFileName.BaseFileName,
+                Filename = nmmFileName.BaseFileName,
                 NumberOfSamples = nmmSensors.NumberOfAirSamples,
                 Status = nmmSensors.AirSampleSourceText,
                 SampleTemperature = new Quantity
@@ -78,28 +82,29 @@ namespace NmmSensors
 
             var serializerOptions = new JsonSerializerOptions {
                 WriteIndented = true,
-                //IgnoreNullValues = true,
                 DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
             };
-            string jsonString = JsonSerializer.Serialize(sensorValues, serializerOptions);
-
-            string verboseString = ToText(sensorValues);
-
-            Console.WriteLine(jsonString);
+            outputText = JsonSerializer.Serialize(sensorValues, serializerOptions);
+            Console.WriteLine(outputText);
             Console.WriteLine();
-            Console.WriteLine(verboseString);
+
+            outputText = ToText(sensorValues);
+            Console.WriteLine(outputText);
+            Console.WriteLine();
+
+
 
         }
 
         private static string ToText(SensorValues poco)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Status text: {poco.Status}");
+            sb.AppendLine($"Status: {poco.Status}");
             sb.AppendLine($"number of data points:      {poco.NumberOfSamples}");
             sb.AppendLine($"sample temperature / {poco.SampleTemperature.Unit}:    {poco.SampleTemperature.Average:F3} ({poco.SampleTemperature.Range:F3})");
-            sb.AppendLine($"air temperature / °C:       {poco.AirTemperature.Average:F3} ({poco.AirTemperature.Range:F3}) [{poco.AirTemperature.Gradient:F3}]");
-            sb.AppendLine($"relative humidity / %:      {poco.Humidity.Average:F2} ({poco.Humidity.Range:F2})");
-            sb.AppendLine($"barometric pressure / Pa:   {poco.BarometricPressure.Average:F0} ({poco.BarometricPressure.Range:F0})");
+            sb.AppendLine($"air temperature / {poco.AirTemperature.Unit}:       {poco.AirTemperature.Average:F3} ({poco.AirTemperature.Range:F3}) [{poco.AirTemperature.Gradient:F3}]");
+            sb.AppendLine($"relative humidity / {poco.Humidity.Unit}:      {poco.Humidity.Average:F2} ({poco.Humidity.Range:F2})");
+            sb.AppendLine($"barometric pressure / {poco.BarometricPressure.Unit}:   {poco.BarometricPressure.Average:F0} ({poco.BarometricPressure.Range:F0})");
             return sb.ToString();
         }
 
