@@ -120,10 +120,13 @@ namespace NmmSensors
             Environment.Exit(code);
         }
 
-        static double Round (double value, int decimals)
-        {
-            int temp = (int)(value * 1000);
-            return (double)temp / 1000;
-        }
+    }
+
+    enum TextOption
+    {
+        None,
+        Plain,
+        Full,
+        SampleOnly
     }
 }
