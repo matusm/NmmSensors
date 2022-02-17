@@ -15,6 +15,12 @@ namespace NmmSensors
         [Option('p', "pretty", HelpText = "JSON output pretty printed.")]
         public bool Pretty { get; set; }
 
+        [Option('f', "full", HelpText = "Complete text output.")]
+        public bool FullText { get; set; }
+
+        [Option('b', "basic", HelpText = "Plain text output.")]
+        public bool PlainText { get; set; }
+
         [Option("comment", DefaultValue = "---", HelpText = "User supplied comment string.")]
         public string UserComment { get; set; }
 
@@ -35,26 +41,11 @@ namespace NmmSensors
                 AddDashesToOption = true
             };
             string sPre = "Program to convert scanning files by SIOS NMM-1 to BCR or ISO 25178-71:2012 raster data format. " +
-                "The quadruple of files (dat ind dsc pos) are analyzed to obtain the required parameters. " +
-                "A rudimentary data processing is implemented via the -r option.";
+                "The quadruple of files (dat ind dsc pos) are analyzed to obtain the required parameters.";
             help.AddPreOptionsLine(sPre);
             help.AddPreOptionsLine("");
             help.AddPreOptionsLine("Usage: " + AppName + " filename1 [filename2] [options]");
             help.AddPostOptionsLine("");
-            help.AddPostOptionsLine("Supported values for --reference (-r):");
-            help.AddPostOptionsLine("    0: nop");
-            help.AddPostOptionsLine("    1: min");
-            help.AddPostOptionsLine("    2: max");
-            help.AddPostOptionsLine("    3: average");
-            help.AddPostOptionsLine("    4: mid");
-            help.AddPostOptionsLine("    5: bias");
-            help.AddPostOptionsLine("    6: first");
-            help.AddPostOptionsLine("    7: last");
-            help.AddPostOptionsLine("    8: center");
-            help.AddPostOptionsLine("    9: linear");
-            help.AddPostOptionsLine("   10: LSQ");
-            help.AddPostOptionsLine("   11: linear(positive)");
-            help.AddPostOptionsLine("   12: LSQ(positive)");
 
             help.AddOptions(this);
 
