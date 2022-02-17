@@ -29,8 +29,6 @@ namespace NmmSensors
             nmmFileName.SetScanIndex(options.ScanIndex);
             NmmEnvironmentData nmmEnvironment = new NmmEnvironmentData(nmmFileName);
 
-            string outputText = string.Empty;
-
             // wrap all data in a POCO
             SensorValues sensorValues = new SensorValues
             {
@@ -79,30 +77,33 @@ namespace NmmSensors
                 },
             };
 
-            if (options.Json)
+            Console.WriteLine(GetOutput(sensorValues, OutputStyleOption.Json));
+        }
+
+        /*********************************************************************************/
+
+        private static string GetOutput(SensorValues poco, OutputStyleOption outputStyle)
+        {
+            string outputText = string.Empty;
+            if(outputStyle == OutputStyleOption.Json || outputStyle == OutputStyleOption.JsonPretty)
             {
                 var serializerOptions = new JsonSerializerOptions
                 {
                     WriteIndented = false,
                     DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
                 };
-                if (options.Pretty)
+                if (outputStyle == OutputStyleOption.JsonPretty)
                     serializerOptions.WriteIndented = true;
-                outputText = JsonSerializer.Serialize(sensorValues, serializerOptions);
+                outputText = JsonSerializer.Serialize(poco, serializerOptions);
+                return outputText;
             }
-
-            Console.WriteLine(outputText);
-            Console.WriteLine();
-
-            outputText = TextSerialize(sensorValues);
-            Console.WriteLine(outputText);
-            Console.WriteLine();
-
-
-
+            outputText = TextSerialize(poco, outputStyle);
+            return outputText;
         }
 
-        private static string TextSerialize(SensorValues poco)
+        /*********************************************************************************/
+
+        private static string TextSerialize(SensorValues poco, OutputStyleOption outputStyle)
         {
             StringBuilder sb = new StringBuilder();
             sb.AppendLine($"Status: {poco.Status}");
@@ -114,6 +115,8 @@ namespace NmmSensors
             return sb.ToString();
         }
 
+        /*********************************************************************************/
+
         static void ErrorExit(string message, int code)
         {
             Console.WriteLine($"{message} (error code {code})");
@@ -122,9 +125,11 @@ namespace NmmSensors
 
     }
 
-    enum TextOption
+    public enum OutputStyleOption
     {
         None,
+        Json,
+        JsonPretty,
         Plain,
         Full,
         SampleOnly
