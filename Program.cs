@@ -77,7 +77,7 @@ namespace NmmSensors
                 },
             };
 
-            Console.WriteLine(GetOutput(sensorValues, OutputStyleOption.Json));
+            Console.WriteLine(GetOutput(sensorValues, OutputStyleOption.SampleOnly));
         }
 
         /*********************************************************************************/
@@ -106,12 +106,26 @@ namespace NmmSensors
         private static string TextSerialize(SensorValues poco, OutputStyleOption outputStyle)
         {
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine($"Status: {poco.Status}");
-            sb.AppendLine($"number of data points:      {poco.NumberOfSamples}");
-            sb.AppendLine($"sample temperature / {poco.SampleTemperature.Unit}:    {poco.SampleTemperature.Average:F3} ({poco.SampleTemperature.Range:F3})");
-            sb.AppendLine($"air temperature / {poco.AirTemperature.Unit}:       {poco.AirTemperature.Average:F3} ({poco.AirTemperature.Range:F3}) [{poco.AirTemperature.Gradient:F3}]");
-            sb.AppendLine($"relative humidity / {poco.Humidity.Unit}:      {poco.Humidity.Average:F2} ({poco.Humidity.Range:F2})");
-            sb.AppendLine($"barometric pressure / {poco.BarometricPressure.Unit}:   {poco.BarometricPressure.Average:F0} ({poco.BarometricPressure.Range:F0})");
+            if (outputStyle == OutputStyleOption.Full)
+            {
+                sb.AppendLine($"Status: {poco.Status}");
+                sb.AppendLine($"Number of data points:      {poco.NumberOfSamples}");
+                sb.AppendLine($"Sample temperature / {poco.SampleTemperature.Unit}:    {poco.SampleTemperature.Average:F3} ({poco.SampleTemperature.Range:F3})");
+                sb.AppendLine($"Air temperature / {poco.AirTemperature.Unit}:       {poco.AirTemperature.Average:F3} ({poco.AirTemperature.Range:F3}) [{poco.AirTemperature.Gradient:F3}]");
+                sb.AppendLine($"Relative humidity / {poco.Humidity.Unit}:      {poco.Humidity.Average:F2} ({poco.Humidity.Range:F2})");
+                sb.AppendLine($"Barometric pressure / {poco.BarometricPressure.Unit}:   {poco.BarometricPressure.Average:F0} ({poco.BarometricPressure.Range:F0})");
+            }
+            if(outputStyle == OutputStyleOption.Plain)
+            {
+                sb.AppendLine($"Sample temperature:  {poco.SampleTemperature.Average:F3} {poco.SampleTemperature.Unit}");
+                sb.AppendLine($"Air temperature:     {poco.AirTemperature.Average:F3} {poco.AirTemperature.Unit}");
+                sb.AppendLine($"Relative humidity:   {poco.Humidity.Average:F2} {poco.Humidity.Unit}");
+                sb.AppendLine($"Barometric pressure: {poco.BarometricPressure.Average:F0} {poco.BarometricPressure.Unit}");
+            }
+            if (outputStyle == OutputStyleOption.SampleOnly)
+            {
+                sb.AppendLine($"{poco.SampleTemperature.Average:F3}");
+            }
             return sb.ToString();
         }
 
