@@ -29,10 +29,16 @@ namespace NmmSensors
             nmmFileName.SetScanIndex(options.ScanIndex);
             NmmEnvironmentData nmmEnvironment = new NmmEnvironmentData(nmmFileName);
 
-            // wrap all data in a POCO
-            SensorValues sensorValues = new SensorValues
+            string qualifiedFilename = nmmFileName.BaseFileName;
+            if(nmmFileName.ScanIndex!=0)
             {
-                Filename = nmmFileName.BaseFileName,
+                qualifiedFilename += $" [scan {nmmFileName.ScanIndex}]"; 
+            }
+
+          // wrap all data in a POCO
+          SensorValues sensorValues = new SensorValues
+            {
+                Filename = qualifiedFilename,
                 NumberOfSamples = nmmEnvironment.NumberOfAirSamples,
                 Status = nmmEnvironment.AirSampleSourceText,
                 SampleTemperature = new Quantity
