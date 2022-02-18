@@ -40,11 +40,10 @@ namespace NmmSensors
                 AdditionalNewLineAfterOption = false,
                 AddDashesToOption = true
             };
-            string sPre = "Program to convert scanning files by SIOS NMM-1 to BCR or ISO 25178-71:2012 raster data format. " +
-                "The quadruple of files (dat ind dsc pos) are analyzed to obtain the required parameters.";
+            string sPre = "Program to extract environmental data from the scanning files produced by SIOS NMM-1.";
             help.AddPreOptionsLine(sPre);
             help.AddPreOptionsLine("");
-            help.AddPreOptionsLine("Usage: " + AppName + " filename1 [filename2] [options]");
+            help.AddPreOptionsLine("Usage: " + AppName + " filename [options]");
             help.AddPostOptionsLine("");
 
             help.AddOptions(this);
