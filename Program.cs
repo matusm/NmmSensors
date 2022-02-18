@@ -77,7 +77,7 @@ namespace NmmSensors
                 },
             };
 
-            OutputStyleOption style = OutputStyleOption.SampleOnly;
+            OutputStyleOption style = OutputStyleOption.Full;
             if (options.Json) style = OutputStyleOption.Json;
             if (options.Pretty) style = OutputStyleOption.JsonPretty;
             if (options.FullText) style = OutputStyleOption.Full;
