@@ -30,13 +30,23 @@ namespace NmmSensors
             NmmEnvironmentData nmmEnvironment = new NmmEnvironmentData(nmmFileName);
 
             string qualifiedFilename = nmmFileName.BaseFileName;
-            if(nmmFileName.ScanIndex!=0)
+            if (nmmFileName.ScanIndex != 0)
             {
-                qualifiedFilename += $" [scan {nmmFileName.ScanIndex}]"; 
+                qualifiedFilename += $" [scan {nmmFileName.ScanIndex}]";
             }
 
-          // wrap all data in a POCO
-          SensorValues sensorValues = new SensorValues
+            // first check if only time series is requested
+            if(options.Acsv)
+            {
+                PrintCsvAndExit(nmmEnvironment.AirTemperatureSeries);
+            }
+            if(options.Scsv)
+            {
+                PrintCsvAndExit(nmmEnvironment.SampleTemperatureSeries);
+            }
+
+            // wrap all data in a POCO
+            SensorValues sensorValues = new SensorValues
             {
                 Filename = qualifiedFilename,
                 NumberOfSamples = nmmEnvironment.NumberOfAirSamples,
@@ -66,10 +76,10 @@ namespace NmmSensors
                     Range = nmmEnvironment.BarometricPressureDrift,
                     Unit = "Pa"
                 },
-                LXAirTemperature = new Quantity 
+                LXAirTemperature = new Quantity
                 {
-                    Average= nmmEnvironment.XTemperature,
-                    Unit="°C"
+                    Average = nmmEnvironment.XTemperature,
+                    Unit = "°C"
                 },
                 LYAirTemperature = new Quantity
                 {
@@ -94,10 +104,21 @@ namespace NmmSensors
 
         /*********************************************************************************/
 
+        static void PrintCsvAndExit(double[] series)
+        {
+            foreach (var v in series)
+            {
+                Console.WriteLine(v);
+            }
+            Environment.Exit(0);
+        }
+
+        /*********************************************************************************/
+
         private static string GetOutput(SensorValues poco, OutputStyleOption outputStyle)
         {
             string outputText = string.Empty;
-            if(outputStyle == OutputStyleOption.Json || outputStyle == OutputStyleOption.JsonPretty)
+            if (outputStyle == OutputStyleOption.Json || outputStyle == OutputStyleOption.JsonPretty)
             {
                 var serializerOptions = new JsonSerializerOptions
                 {
@@ -128,7 +149,7 @@ namespace NmmSensors
                 sb.AppendLine($"Relative humidity / {poco.Humidity.Unit}:     {poco.Humidity.Average:F2} ({poco.Humidity.Range:F2})");
                 sb.AppendLine($"Barometric pressure / {poco.BarometricPressure.Unit}:  {poco.BarometricPressure.Average:F0} ({poco.BarometricPressure.Range:F0})");
             }
-            if(outputStyle == OutputStyleOption.Plain)
+            if (outputStyle == OutputStyleOption.Plain)
             {
                 sb.AppendLine($"Sample temperature:  {poco.SampleTemperature.Average:F3} {poco.SampleTemperature.Unit}");
                 sb.AppendLine($"Air temperature:     {poco.AirTemperature.Average:F3} {poco.AirTemperature.Unit}");

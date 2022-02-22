@@ -21,6 +21,12 @@ namespace NmmSensors
         [Option('b', "basic", HelpText = "Plain text output.")]
         public bool PlainText { get; set; }
 
+        [Option("sCSV", HelpText = "Series of sample temperatures.")]
+        public bool Scsv { get; set; }
+
+        [Option("aCSV", HelpText = "Series of air temperatures.")]
+        public bool Acsv { get; set; }
+
         [Option("comment", DefaultValue = "---", HelpText = "User supplied comment string.")]
         public string UserComment { get; set; }
 
