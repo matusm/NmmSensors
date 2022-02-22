@@ -35,7 +35,7 @@ namespace NmmSensors
                 qualifiedFilename += $" [scan {nmmFileName.ScanIndex}]";
             }
 
-            // first check if only time series is requested
+            // first check if only a time series is requested
             if(options.Acsv)
             {
                 PrintCsvAndExit(nmmEnvironment.AirTemperatureSeries);
@@ -43,6 +43,14 @@ namespace NmmSensors
             if(options.Scsv)
             {
                 PrintCsvAndExit(nmmEnvironment.SampleTemperatureSeries);
+            }
+            if (options.Hcsv)
+            {
+                PrintCsvAndExit(nmmEnvironment.RelativeHumiditySeries);
+            }
+            if (options.Pcsv)
+            {
+                PrintCsvAndExit(nmmEnvironment.BarometricPressureSeries);
             }
 
             // wrap all data in a POCO
@@ -165,7 +173,7 @@ namespace NmmSensors
 
         /*********************************************************************************/
 
-        static void ErrorExit(string message, int code)
+        private static void ErrorExit(string message, int code)
         {
             Console.WriteLine($"{message} (error code {code})");
             Environment.Exit(code);
